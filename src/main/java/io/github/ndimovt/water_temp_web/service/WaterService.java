@@ -17,6 +17,16 @@ public class WaterService {
     public ArrayList<Water> byTown(String town){
         return repository.findByTown(town);
     }
+    public ArrayList<Water> byYear(String year){
+        ArrayList<Water> full = (ArrayList<Water>) repository.findAll();
+        ArrayList<Water> byYear = new ArrayList<>();
+        for(Water water : full){
+            if(water.getDate().contains(year)){
+                byYear.add(water);
+            }
+        }
+        return byYear;
+    }
     public Water insert(Water water){
         return repository.save(water);
     }

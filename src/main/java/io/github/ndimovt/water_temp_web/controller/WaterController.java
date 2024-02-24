@@ -13,15 +13,20 @@ public class WaterController {
     @Autowired
     private WaterService service;
     @GetMapping("/byTownDate/{town},{date}")
-    public ArrayList<Water> byDateTown(@PathVariable String town, @PathVariable String date){
+    public ArrayList<Water> findByDateTown(@PathVariable String town, @PathVariable String date){
         return service.byTownAndDay(town,date);
+    }
+    @GetMapping("/year/{date}")
+    public ArrayList<Water> findByYear(@PathVariable String date){
+        return service.byYear(date);
+    }
+    @GetMapping("/byTown/{town}")
+    public ArrayList<Water> findByTown(@PathVariable String town){
+        return service.byTown(town);
     }
     @PostMapping("/insert")
     public Water insert (@RequestBody Water water){
         return service.insert(water);
     }
-    @GetMapping("/byTown/{town}")
-    public ArrayList<Water> byTown(@PathVariable String town){
-        return service.byTown(town);
-    }
+
 }
