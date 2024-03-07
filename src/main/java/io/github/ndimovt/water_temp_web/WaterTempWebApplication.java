@@ -8,5 +8,6 @@ public class WaterTempWebApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(WaterTempWebApplication.class, args);
+
 	}
 }

@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 
 @Service
-public class ScientistService {
+public class ScientistService{
     @Autowired
     private ScientistRepository repo;
 
-    public String enter(String username, String pass){
+    public String logIn(String username, String pass){
         StringBuilder sb = new StringBuilder();
         ArrayList<Scientist> information = (ArrayList<Scientist>) repo.findAll();
         for(Scientist check : information){
@@ -22,9 +22,4 @@ public class ScientistService {
         }
         return null;
     }
-    public ArrayList<Scientist> getAll(){
-        return (ArrayList<Scientist>) repo.findAll();
-    }
-
-
 }

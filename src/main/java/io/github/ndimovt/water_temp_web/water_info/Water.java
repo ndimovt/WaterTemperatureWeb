@@ -2,6 +2,8 @@ package io.github.ndimovt.water_temp_web.water_info;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
+
 @Document(collection = "temperature")
 public class Water {
 
@@ -42,4 +44,15 @@ public class Water {
         this.date = date;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Water water)) return false;
+        return Double.compare(water.temperature, temperature) == 0 && Objects.equals(town, water.town) && Objects.equals(date, water.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(town, temperature, date);
+    }
 }
