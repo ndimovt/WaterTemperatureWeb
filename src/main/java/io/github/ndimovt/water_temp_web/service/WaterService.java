@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -33,8 +35,9 @@ public class WaterService{
         }
         return byYear;
     }
-    public Water readExcelTable(MultipartFile file){
+    public boolean readExcelTable(MultipartFile file){
         ArrayList<Water> allRecords = (ArrayList<Water>) repository.findAll();
+        int count = 0;
         try(InputStream fis = file.getInputStream();
             Workbook workbook = WorkbookFactory.create(fis)){
             Sheet sheet = workbook.getSheetAt(0);
@@ -42,32 +45,23 @@ public class WaterService{
             while(rowIterator.hasNext()){
                 Row row = rowIterator.next();
                 Water water = new Water();
-                water.setTown(getStringValue(row.getCell(0)));
+                water.setTown(String.valueOf(row.getCell(0)));
                 water.setTemperature(Double.parseDouble(String.valueOf(row.getCell(1))));
-                water.setDate(getStringValue(row.getCell(2)));
+                water.setDate(String.valueOf(row.getCell(2)));
                 if(!allRecords.contains(water)){
                     repository.save(water);
+                    count++;
                 }
+            }
+            if(count > 0){
+                return true;
             }
         }catch (FileNotFoundException fnf){
             fnf.printStackTrace();
         }catch (IOException ie){
             ie.printStackTrace();
         }
-        return null;
-    }
-    private String getStringValue(Cell cell) {
-        if (cell == null) {
-            return null;
-        }
-        switch (cell.getCellType()) {
-            case STRING:
-                return cell.getStringCellValue();
-            case NUMERIC:
-                return String.valueOf(cell.getNumericCellValue());
-            default:
-                return null;
-        }
+        return false;
     }
 
     public Water insertSingleRecord(Water water){

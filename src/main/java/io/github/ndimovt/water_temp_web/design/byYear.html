@@ -4,12 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ByYear</title>
+    <style>
+        body {
+            background-image: url('images/image7.jpg');
+            background-repeat: no-repeat;
+        }
+    </style>
 </head>
 <body>
-<form action="" method="get">
-    <input type="number" placeholder="YYYY" min="2015">
+<form action="" method="get" id="form">
+    <input type="number" placeholder="YYYY" min="2015" id="year">
     <button type="submit" >Search</button>
 </form>
 
+<script>
+        document.getElementById('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const year = document.getElementById('year').value;
+
+            fetch('http://localhost:8081/year/'+encodeURIComponent(year),{
+                method: 'GET',
+                headers: {
+                    'Accept' : 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(item => {
+                    let obj = {
+                        town: item.town,
+                        temperature: item.temperature,
+                        date: item.date
+                    };
+                    console.log(obj);
+                });
+            })
+        })
+
+
+    </script>
 </body>
 </html>

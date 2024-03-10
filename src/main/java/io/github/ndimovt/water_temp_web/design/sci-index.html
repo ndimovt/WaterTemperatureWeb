@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body{
+            background-image: url('images/image8.jpg');
+        }
+        h1{
+            color: antiquewhite;
+            text-align: center;
+        }
+        button{
+            width: 90px;
+            height: 90px;
+            border-radius: 40px;
+            border-color: black;
+        }
+    </style>
+    <title>System</title>
+
+</head>
+<body>
+<h1 id="hero"></h1>
+<button onclick="home()">Home Page</button>
+<br><br>
+<input type="file" id="file" accept=".xlsx">
+<br><br>
+<button type='submit' onclick="readFile()">Upload</button>
+
+
+<script>
+
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name');
+        const surname = params.get('surname');
+
+        document.getElementById('hero').textContent = `Wellcome ${name} ${surname}`;
+
+        function home(){
+            window.open('index.html');
+        }
+
+        function readFile(){
+            const userFile = document.getElementById('file').files[0];
+
+            const formData = new FormData();
+            formData.append('file', userFile);
+
+            fetch('http://localhost:8081/table', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(res => res.json())
+            .then(data => console.log(data))
+        }
+    </script>
+
+</body>
+</html>

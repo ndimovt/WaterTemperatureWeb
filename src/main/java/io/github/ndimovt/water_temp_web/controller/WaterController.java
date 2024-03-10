@@ -2,6 +2,7 @@ package io.github.ndimovt.water_temp_web.controller;
 
 import io.github.ndimovt.water_temp_web.service.WaterService;
 import io.github.ndimovt.water_temp_web.water_info.Water;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,26 +15,29 @@ import java.util.ArrayList;
 public class WaterController {
     @Autowired
     private WaterService service;
-    @GetMapping("/byTownDate/{town},{date}")
+    @GetMapping("byTownDate/{town},{date}")
     public ArrayList<Water> findByDateTown(@PathVariable String town, @PathVariable String date){
         return service.searchByTownAndDay(town,date);
     }
-    @GetMapping("/year/{date}")
+    @GetMapping("year/{date}")
     public ArrayList<Water> findByYear(@PathVariable String date){
         return service.searchByYear(date);
     }
-    @GetMapping("/byTown/{town}")
+    @GetMapping("byTown/{town}")
     public ArrayList<Water> findByTown(@PathVariable String town){
         return service.searchByTown(town);
     }
-    @PostMapping("/insert")
+    @PostMapping("insert")
     public Water insert (@RequestBody Water water){
         return service.insertSingleRecord(water);
     }
     @PostMapping("table")
-    public Water insertExcelData(@RequestParam("file") MultipartFile file){
-        return service.readExcelTable(file);
+    public int insertExcelData(@RequestParam("file") MultipartFile file) {
+        boolean success = service.readExcelTable(file);
+        if (success) {
+            return HttpServletResponse.SC_CREATED;
+        } else {
+            return HttpServletResponse.SC_BAD_REQUEST;
+        }
     }
-
-
 }
