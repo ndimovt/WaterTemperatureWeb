@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 @Service
 public class WaterService{
@@ -20,23 +19,29 @@ public class WaterService{
     private WaterRepository repository;
 
     public ArrayList<Water> searchByTownAndDay(String town, String date){
-        return repository.findByTownAndDate(town,date);
+        records();
+        ArrayList<Water> result = new ArrayList<>();
+        for(Water water : records()){
+            if(water.getTown().contains(town) && water.getDate().contains(date)){
+                result.add(new Water(water.getTemperature(), water.getDate()));
+            }
+        }
+        return result;
     }
     public ArrayList<Water> searchByTown(String town){
         return repository.findByTown(town);
     }
-    public ArrayList<Water> searchByYear(String year){
-        ArrayList<Water> full = (ArrayList<Water>) repository.findAll();
-        ArrayList<Water> byYear = new ArrayList<>();
-        for(Water water : full){
-            if(water.getDate().contains(year)){
-                byYear.add(water);
+    public double searchByYear(String town, String date){
+        records();
+        for(Water water : records()){
+            if(water.getTown().contains(town) && water.getDate().contains(date)){
+                return water.getTemperature();
             }
         }
-        return byYear;
+        return 0.0;
     }
     public boolean readExcelTable(MultipartFile file){
-        ArrayList<Water> allRecords = (ArrayList<Water>) repository.findAll();
+        records();
         int count = 0;
         try(InputStream fis = file.getInputStream();
             Workbook workbook = WorkbookFactory.create(fis)){
@@ -48,7 +53,7 @@ public class WaterService{
                 water.setTown(String.valueOf(row.getCell(0)));
                 water.setTemperature(Double.parseDouble(String.valueOf(row.getCell(1))));
                 water.setDate(String.valueOf(row.getCell(2)));
-                if(!allRecords.contains(water)){
+                if(!records().contains(water)){
                     repository.save(water);
                     count++;
                 }
@@ -67,7 +72,8 @@ public class WaterService{
     public Water insertSingleRecord(Water water){
         return repository.save(water);
     }
-    public List<Water> addToMongoDB(ArrayList<Water> list){
-        return repository.saveAll(list);
+    private ArrayList<Water> records(){
+        ArrayList<Water> allRecords = (ArrayList<Water>) repository.findAll();
+        return allRecords;
     }
 }

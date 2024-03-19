@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insert</title>
+</head>
+<body>
+<div>
+    <form method="post" action="">
+        <p>Plese select town:</p>
+        <input type="radio" name="town" id="kavarna" value="Kavarna">
+        <label for="kavarna">Kavarna</label><br>
+        <input type="radio" name="town" id="balchik" value="Balchik">
+        <label for="balchik">Balchik</label><br>
+        <input type="radio" name="town" id="varna" value="Varna">
+        <label for="varna">Varna</label><br>
+        <input type="radio" name="town" id="burgas" value="Burgas">
+        <label for="burgas">Burgas</label><br><br>
+        <label for="temperature">Enter temperature in Celsius:</label><br><br>
+        <input type="number" id="temperature" step="0.1" required><br><br>
+        <label for="date">Enter a date (YYYY-MM-DD):</label><br><br>
+        <input type="text" id="date" pattern="\d{4}-\d{2}-\d{2}" required>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>

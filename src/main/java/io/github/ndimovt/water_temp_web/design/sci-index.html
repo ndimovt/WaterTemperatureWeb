@@ -28,6 +28,8 @@
 <input type="file" id="file" accept=".xlsx">
 <br><br>
 <button type='submit' onclick="readFile()">Upload</button>
+<br><br>
+<button  onclick="insertSingleRecord()">Insert Record</button>
 
 
 <script>
@@ -42,6 +44,10 @@
             window.open('index.html');
         }
 
+        function insertSingleRecord(){
+            window.open('single-record.html','', 'width=500, height=500');
+        }
+
         function readFile(){
             const userFile = document.getElementById('file').files[0];
 
@@ -53,7 +59,13 @@
                 body: formData,
             })
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data => {
+                if(data == 201)
+                alert('Database updated successfully!')
+                else if(data == 409)
+                alert('Information already exists in database!')
+            })
+            .catch(error => alert('Connection error. Please contact your local IT support!'))
         }
     </script>
 

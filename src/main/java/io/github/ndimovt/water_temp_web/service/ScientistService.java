@@ -14,7 +14,6 @@ public class ScientistService{
     private ScientistRepository repo;
 
     public JSONObject logIn(String username, String pass){
-        StringBuilder sb = new StringBuilder();
         JSONObject obj = new JSONObject();
         ArrayList<Scientist> information = (ArrayList<Scientist>) repo.findAll();
         for(Scientist check : information){

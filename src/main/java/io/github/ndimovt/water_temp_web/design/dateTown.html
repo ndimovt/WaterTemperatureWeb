@@ -3,22 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://cdn.plot.ly/plotly-2.30.0.min.js'></script>
+    <style>
+        body{
+            background-color: aquamarine;
+        }
+    </style>
     <title>DateTown</title>
 </head>
-<body>
-<form action="">
+<body >
+<form action="" method="get" id="form">
     <p>Plese select town</p>
-    <input type="radio" id="kavarna" value="Kavarna">
+    <input type="radio" name="towns" id="radio-btn" value="Kavarna">
     <label for="kavarna">Kavarna</label><br>
-    <input type="radio" id="balchik" value="Balchik">
+    <input type="radio"  name="towns" id="radio-btn" value="Balchik">
     <label for="kavarna">Balchik</label><br>
-    <input type="radio" id="Varna" value="Varna">
+    <input type="radio"  name="towns" id="radio-btn" value="Varna">
     <label for="kavarna">Varna</label><br>
-    <input type="radio" id="burgas" value="Burgas">
+    <input type="radio"  name="towns" id="radio-btn" value="Burgas">
     <label for="kavarna">Burgas</label><br><br>
     <label for="date">Please enter date</label><br>
-    <input type="date" name="date">
+    <input type="month" id="date" required>
+    <br><br>
+    <button type="submit" onclick="getGraphData()">Send</button>
 </form>
+
+<div id='myDiv'>  </div>
+
+<script src="script.js"></script>
 
 </body>
 </html>

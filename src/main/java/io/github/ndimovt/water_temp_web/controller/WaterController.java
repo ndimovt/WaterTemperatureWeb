@@ -19,9 +19,9 @@ public class WaterController {
     public ArrayList<Water> findByDateTown(@PathVariable String town, @PathVariable String date){
         return service.searchByTownAndDay(town,date);
     }
-    @GetMapping("year/{date}")
-    public ArrayList<Water> findByYear(@PathVariable String date){
-        return service.searchByYear(date);
+    @GetMapping("year/{town},{date}")
+    public double findByYear(@PathVariable String town, @PathVariable String date) {
+        return service.searchByYear(town, date);
     }
     @GetMapping("byTown/{town}")
     public ArrayList<Water> findByTown(@PathVariable String town){
@@ -37,7 +37,7 @@ public class WaterController {
         if (success) {
             return HttpServletResponse.SC_CREATED;
         } else {
-            return HttpServletResponse.SC_BAD_REQUEST;
+            return HttpServletResponse.SC_CONFLICT;
         }
     }
 }

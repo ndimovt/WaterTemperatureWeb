@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.ArrayList;
 
 public interface WaterRepository extends MongoRepository<Water, String> {
-    public abstract ArrayList<Water> findByTown(String town);
-    public abstract ArrayList<Water> findByTownAndDate(String town, String date);
+    public ArrayList<Water> findByTown(String town);
 
 }

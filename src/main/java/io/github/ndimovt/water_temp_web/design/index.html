@@ -8,17 +8,24 @@
 </head>
 <body>
 <h1>Welcome to the water temperature REST-API</h1>
+<div class="float-main">
 
-<div>
-    <button><strong>Log In</strong></button>
-    <br><br>
-    <button><strong>Search By Year</strong></button>
-    <br><br>
-    <button><strong>Search By Town & Date</strong></button>
-    <br><br>
-    <button><strong>Search By Town</strong></button>
+    <div class="float-child">
+        <button onclick="logIn()"><strong>Log In</strong></button>
+        <br><br>
+        <button onclick="byDateTown()"><strong>Search By Town & Month</strong></button>
+        <br><br>
+        <button onclick="today()"><strong>Temp Today</strong></button>
+        <br><br>
+
+    </div>
+
+    <div class="float-child">
+        <img src="images/map.png" alt="none" width="600px" height="600px">
+    </div>
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>

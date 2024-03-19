@@ -14,11 +14,10 @@ public class Water {
     public Water() {
     }
 
-    public Water(String date, double temperature) {
-        this.date = date;
+    public Water(double temperature, String date) {
         this.temperature = temperature;
+        this.date = date;
     }
-
 
     public String getTown() {
         return town;
@@ -48,11 +47,11 @@ public class Water {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Water water)) return false;
-        return Double.compare(water.temperature, temperature) == 0 && Objects.equals(town, water.town) && Objects.equals(date, water.date);
+        return Objects.equals(town, water.town) && Objects.equals(date, water.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(town, temperature, date);
+        return Objects.hash(town, date);
     }
 }

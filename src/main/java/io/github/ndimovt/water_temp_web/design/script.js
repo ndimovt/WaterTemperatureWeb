@@ -13,12 +13,12 @@ function logIn(){
     window.open("log.html","", "width=500,height=500");
 }
 
-function byYear(){
-    window.open("byYear.html", "", "width=500, height=500");
+function today(){
+    window.open("today.html", "", "width=500, height=500");
 }
 
 function byDateTown(){
-    window.open("dateTown.html","", "width=500,height=500");
+    window.open("dateTown.html","", "width=700, height=700");
 }
 
 function scientistEntry(){
@@ -45,4 +45,115 @@ function scientistEntry(){
                     alert("Wrong username or password");
                 }
             })
+            .catch(error => alert('Connection error. Please contact your local IT support!' + error))
 }
+
+function checkTodayTemp(){
+    document.getElementById('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let selectedTown;
+        const townRadios = document.getElementsByName('town');
+        townRadios.forEach(radio => {
+            if (radio.checked) {
+                selectedTown = radio.value;
+            }
+        });
+        const currentDate = new Date();
+        let year = currentDate.getFullYear();
+        let month = currentDate.getMonth() + 1;
+        let day = currentDate.getDate();
+        let today = `${year}-${month < 10? '0' + month : month}-${day < 10? '0' + day : day}`;
+
+        fetch(`http://localhost:8081/year/${encodeURIComponent(selectedTown)},${encodeURIComponent(today)}`,{
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Accept' : 'application/json'
+            }
+        })
+        .then(res => {
+            if(!res.ok){
+                alert('Connection failed!');
+            }else{
+                return res.json()
+            }
+        })
+        .then(data => {
+            if(data == 0.0){
+                alert('Information is not available yet! Please try again later!');
+            }else{
+                alert(`Temperature in ${selectedTown} is ${data} degrees`);
+            }
+        });
+    });
+}
+
+const xDates = [];
+const yTemp = [];
+
+function getGraphData(){
+    document.getElementById('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let town;
+        const radioTown = document.getElementsByName('towns');
+        radioTown.forEach(radio => {
+            if(radio.checked){
+                town = radio.value;
+            }
+        });
+        let date = document.getElementById('date').value;
+
+        fetch(`http://localhost:8081/byTownDate/${town},${date}`, {
+            method: 'GET',
+            mode: 'cors',
+            headers:{
+                'Accept' : 'application/json'
+            }
+        })
+            .then(res => {
+                if(!res.ok){
+                    alert('Connection failed!')
+                }else{
+                    return res.json()
+                }
+            })
+            .then(data => {
+                data.forEach(item => {
+                    xDates.push(item.date);
+                    yTemp.push(item.temperature);
+                });
+                createGraph(town);
+            })
+            .catch(error => console.log(error))
+        })
+}
+
+function createGraph(town){
+    getGraphData();
+    console.log(xDates);
+    console.log(yTemp);
+
+    trace1 = {
+        x: xDates,
+        y: yTemp,
+        mode: 'lines+markers',
+        name: 'Red',
+        line: {
+          color: 'rgb(219, 64, 82)',
+          width: 3
+        }
+      };
+
+      var layout = {
+        title: `${town}`,
+        width: 500,
+        height: 500,
+    };
+
+      var data = [trace1];
+
+      Plotly.newPlot('myDiv', data, layout);
+}
+
