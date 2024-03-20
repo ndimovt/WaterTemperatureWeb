@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Insert</title>
+    <style>
+
+    </style>
 </head>
 <body>
-<div>
-    <form method="post" action="">
+<div class="main">
+    <form method="post" action="" id="insertForm">
         <p>Plese select town:</p>
         <input type="radio" name="town" id="kavarna" value="Kavarna">
         <label for="kavarna">Kavarna</label><br>
@@ -22,9 +25,52 @@
         <label for="date">Enter a date (YYYY-MM-DD):</label><br><br>
         <input type="text" id="date" pattern="\d{4}-\d{2}-\d{2}" required>
         <br><br>
-        <button type="submit">Submit</button>
+        <button type="submit" onclick="insertSingle()">Submit</button>
     </form>
 </div>
+
+<script>
+
+        function insertSingle(){
+            document.getElementById('insertForm').addEventListener('submit', function(e){
+                e.preventDefault();
+
+                let town;
+                const choice = document.getElementsByName('town');
+                choice.forEach(radio => {
+                    if(radio.checked){
+                        town = radio.value;
+                    }
+                });
+
+                let temperature = document.getElementById('temperature').value;
+                let date = document.getElementById('date').value;
+
+                const information = {
+                    town: town,
+                    temperature: temperature,
+                    date: date
+                };
+
+                fetch('http://localhost:8081/insert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify(information)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data == true){
+                        alert('Information successfully inserted in database!');
+                    }else{
+                        alert('Record already exists in database!');
+                    }
+                })
+                .catch(error => console.log(error));
+            });
+        }
+    </script>
 
 </body>
 </html>

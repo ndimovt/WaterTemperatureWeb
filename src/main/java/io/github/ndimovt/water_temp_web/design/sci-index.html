@@ -17,26 +17,45 @@
             border-radius: 40px;
             border-color: black;
         }
+        .float-main{
+            display: flex;
+        }
+        .float-child{
+            flex: 1;
+        }
+        .float-child:first-child {
+            margin-right: 20px;
+        }
     </style>
     <title>System</title>
 
 </head>
 <body>
 <h1 id="hero"></h1>
-<button onclick="home()">Home Page</button>
-<br><br>
-<input type="file" id="file" accept=".xlsx">
-<br><br>
-<button type='submit' onclick="readFile()">Upload</button>
-<br><br>
-<button  onclick="insertSingleRecord()">Insert Record</button>
+<div class="float-main">
+    <div class="float-child">
 
+        <button onclick="home()">Home Page</button>
+        <br><br>
+        <input type="file" id="file" accept=".xlsx">
+        <br><br>
+        <button type='submit' onclick="readFile()">Upload</button>
+        <br><br>
+        <button  onclick="insertSingleRecord()">Insert Record</button>
+    </div>
+    <div class="float-child">
+        <img src="images/circle.png" alt="none" width="550px" height="550px">
+
+    </div>
+</div>
 
 <script>
 
         const params = new URLSearchParams(window.location.search);
         const name = params.get('name');
         const surname = params.get('surname');
+        const town = params.get('town');
+        console.log(town);
 
         document.getElementById('hero').textContent = `Wellcome ${name} ${surname}`;
 

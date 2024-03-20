@@ -69,8 +69,13 @@ public class WaterService{
         return false;
     }
 
-    public Water insertSingleRecord(Water water){
-        return repository.save(water);
+    public boolean insertSingleRecord(Water water){
+        records();
+        if(!records().contains(water)){
+            repository.save(water);
+            return true;
+        }
+        return false;
     }
     private ArrayList<Water> records(){
         ArrayList<Water> allRecords = (ArrayList<Water>) repository.findAll();

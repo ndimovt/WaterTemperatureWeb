@@ -28,7 +28,7 @@ public class WaterController {
         return service.searchByTown(town);
     }
     @PostMapping("insert")
-    public Water insert (@RequestBody Water water){
+    public boolean insert (@RequestBody Water water){
         return service.insertSingleRecord(water);
     }
     @PostMapping("table")
