@@ -29,48 +29,9 @@
     </form>
 </div>
 
-<script>
+<script src="script.js">
 
-        function insertSingle(){
-            document.getElementById('insertForm').addEventListener('submit', function(e){
-                e.preventDefault();
-
-                let town;
-                const choice = document.getElementsByName('town');
-                choice.forEach(radio => {
-                    if(radio.checked){
-                        town = radio.value;
-                    }
-                });
-
-                let temperature = document.getElementById('temperature').value;
-                let date = document.getElementById('date').value;
-
-                const information = {
-                    town: town,
-                    temperature: temperature,
-                    date: date
-                };
-
-                fetch('http://localhost:8081/insert', {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    body: JSON.stringify(information)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if(data == true){
-                        alert('Information successfully inserted in database!');
-                    }else{
-                        alert('Record already exists in database!');
-                    }
-                })
-                .catch(error => console.log(error));
-            });
-        }
-    </script>
+</script>
 
 </body>
 </html>

@@ -6,6 +6,9 @@ body{
     height: 100vh;
     transition: background-image 5s ease-in-out;
 }
+#text{
+    color: rgb(212, 201, 96);
+}
 .container{
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

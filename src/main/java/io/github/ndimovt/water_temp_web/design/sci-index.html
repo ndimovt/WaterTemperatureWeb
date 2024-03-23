@@ -11,22 +11,9 @@
             color: antiquewhite;
             text-align: center;
         }
-        button{
-            width: 90px;
-            height: 90px;
-            border-radius: 40px;
-            border-color: black;
-        }
-        .float-main{
-            display: flex;
-        }
-        .float-child{
-            flex: 1;
-        }
-        .float-child:first-child {
-            margin-right: 20px;
-        }
+
     </style>
+    <link rel="stylesheet" href="style.css">
     <title>System</title>
 
 </head>
@@ -34,17 +21,27 @@
 <h1 id="hero"></h1>
 <div class="float-main">
     <div class="float-child">
-
-        <button onclick="home()">Home Page</button>
+        <button onclick="home()"><strong>Home Page</strong></button>
         <br><br>
         <input type="file" id="file" accept=".xlsx">
         <br><br>
-        <button type='submit' onclick="readFile()">Upload</button>
+        <button type='submit' onclick="readFile()"><strong>Upload</strong></button>
         <br><br>
-        <button  onclick="insertSingleRecord()">Insert Record</button>
+        <button  onclick="insertSingleRecord()"><strong>Insert Record</strong></button>
+        <br><br>
+        <button onclick="window.open('dateTown.html')"><strong>Month Info</strong></button>
     </div>
     <div class="float-child">
         <img src="images/circle.png" alt="none" width="550px" height="550px">
+
+    </div>
+    <div class="float-child">
+        <p id="text">
+            The temperature is measured by specialized sensors, but you can insert records manually as well. <br>
+            Keep in mind that if record for the current date and town exists in database you will not be able to overwrite it!<br>
+            Information form sensors is also kept in Microsoft Excell table for backup.<br>
+            You can import your Microsoft Excell table as well, and ecords not present in database will we added.
+        </p>
 
     </div>
 </div>
@@ -59,34 +56,7 @@
 
         document.getElementById('hero').textContent = `Wellcome ${name} ${surname}`;
 
-        function home(){
-            window.open('index.html');
-        }
-
-        function insertSingleRecord(){
-            window.open('single-record.html','', 'width=500, height=500');
-        }
-
-        function readFile(){
-            const userFile = document.getElementById('file').files[0];
-
-            const formData = new FormData();
-            formData.append('file', userFile);
-
-            fetch('http://localhost:8081/table', {
-                method: 'POST',
-                body: formData,
-            })
-            .then(res => res.json())
-            .then(data => {
-                if(data == 201)
-                alert('Database updated successfully!')
-                else if(data == 409)
-                alert('Information already exists in database!')
-            })
-            .catch(error => alert('Connection error. Please contact your local IT support!'))
-        }
     </script>
-
+<script src="script.js"></script>
 </body>
 </html>

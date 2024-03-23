@@ -22,6 +22,11 @@ function byDateTown(){
 }
 
 function scientistEntry(){
+
+    document.getElementById('scientistLog').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+
     let username = document.getElementById("username").value;
     let password = document.getElementById("pass").value;
     fetch(`http://localhost:8081/info/get/${encodeURIComponent(username)}/${encodeURIComponent(password)}`,{
@@ -46,6 +51,7 @@ function scientistEntry(){
                 }
             })
             .catch(error => alert('Connection error. Please contact your local IT support!' + error))
+        });
 }
 
 function checkTodayTemp(){
@@ -65,7 +71,7 @@ function checkTodayTemp(){
         let day = currentDate.getDate();
         let today = `${year}-${month < 10? '0' + month : month}-${day < 10? '0' + day : day}`;
 
-        fetch(`http://localhost:8081/year/${encodeURIComponent(selectedTown)},${encodeURIComponent(today)}`,{
+        fetch(`http://localhost:8081/year/${encodeURIComponent(selectedTown)}/${encodeURIComponent(today)}`,{
             method: 'GET',
             mode: 'cors',
             headers: {
@@ -105,7 +111,7 @@ function getGraphData(){
         });
         let date = document.getElementById('date').value;
 
-        fetch(`http://localhost:8081/byTownDate/${town},${date}`, {
+        fetch(`http://localhost:8081/byTownDate/${town}/${date}`, {
             method: 'GET',
             mode: 'cors',
             headers:{
@@ -157,3 +163,70 @@ function createGraph(town){
       Plotly.newPlot('myDiv', data, layout);
 }
 
+function home(){
+    window.open('index.html');
+}
+
+function insertSingleRecord(){
+    window.open('single-record.html','', 'width=500, height=500');
+}
+
+function readFile(){
+    const userFile = document.getElementById('file').files[0];
+
+    const formData = new FormData();
+    formData.append('file', userFile);
+
+    fetch('http://localhost:8081/table', {
+        method: 'POST',
+        body: formData,
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data == 201)
+        alert('Database updated successfully!')
+        else if(data == 409)
+        alert('Information already exists in database!')
+    })
+    .catch(error => alert('Connection error. Please contact your local IT support!'))
+}
+
+function insertSingle(){
+    document.getElementById('insertForm').addEventListener('submit', function(e){
+        e.preventDefault();
+
+        let town;
+        const choice = document.getElementsByName('town');
+        choice.forEach(radio => {
+            if(radio.checked){
+                town = radio.value;
+            }
+        });
+
+        let temperature = document.getElementById('temperature').value;
+        let date = document.getElementById('date').value;
+
+        const information = {
+            town: town,
+            temperature: temperature,
+            date: date
+        };
+
+        fetch('http://localhost:8081/insert', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(information)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data == true){
+                alert('Information successfully inserted in database!');
+            }else{
+                alert('Record already exists in database!');
+            }
+        })
+        .catch(error => console.log(error));
+    });
+}

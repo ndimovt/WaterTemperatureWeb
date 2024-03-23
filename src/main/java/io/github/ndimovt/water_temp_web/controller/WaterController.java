@@ -11,15 +11,15 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class WaterController {
     @Autowired
     private WaterService service;
-    @GetMapping("byTownDate/{town},{date}")
+    @GetMapping("byTownDate/{town}/{date}")
     public ArrayList<Water> findByDateTown(@PathVariable String town, @PathVariable String date){
         return service.searchByTownAndDay(town,date);
     }
-    @GetMapping("year/{town},{date}")
+    @GetMapping("year/{town}/{date}")
     public double findByYear(@PathVariable String town, @PathVariable String date) {
         return service.searchByYear(town, date);
     }
