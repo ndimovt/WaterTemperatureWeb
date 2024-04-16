@@ -10,28 +10,27 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class WaterController {
     @Autowired
     private WaterService service;
-    @GetMapping("byTownDate/{town}/{date}")
+    @GetMapping("/water/find/{town}/{date}")
     public ArrayList<Water> findByDateTown(@PathVariable String town, @PathVariable String date){
         return service.searchByTownAndDay(town,date);
     }
-    @GetMapping("year/{town}/{date}")
+    @GetMapping("/water/findByYear/{town}/{date}")
     public double findByYear(@PathVariable String town, @PathVariable String date) {
         return service.searchByYear(town, date);
     }
-    @GetMapping("byTown/{town}")
+    @GetMapping("/water/findByTown/{town}")
     public ArrayList<Water> findByTown(@PathVariable String town){
         return service.searchByTown(town);
     }
-    @PostMapping("insert")
+    @PostMapping("/water")
     public boolean insert (@RequestBody Water water){
         return service.insertSingleRecord(water);
     }
-    @PostMapping("table")
+    @PostMapping("/water/file/")
     public int insertExcelData(@RequestParam("file") MultipartFile file) {
         boolean success = service.readExcelTable(file);
         if (success) {

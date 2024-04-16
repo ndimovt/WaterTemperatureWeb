@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class WaterService{
@@ -19,9 +20,9 @@ public class WaterService{
     private WaterRepository repository;
 
     public ArrayList<Water> searchByTownAndDay(String town, String date){
-        records();
+        List<Water> database = records();
         ArrayList<Water> result = new ArrayList<>();
-        for(Water water : records()){
+        for(Water water : database){
             if(water.getTown().contains(town) && water.getDate().contains(date)){
                 result.add(new Water(water.getTemperature(), water.getDate()));
             }
@@ -32,8 +33,8 @@ public class WaterService{
         return repository.findByTown(town);
     }
     public double searchByYear(String town, String date){
-        records();
-        for(Water water : records()){
+        List<Water> database = records();
+        for(Water water : database){
             if(water.getTown().contains(town) && water.getDate().contains(date)){
                 return water.getTemperature();
             }
@@ -41,7 +42,7 @@ public class WaterService{
         return 0.0;
     }
     public boolean readExcelTable(MultipartFile file){
-        records();
+        List<Water> database = records();
         int count = 0;
         try(InputStream fis = file.getInputStream();
             Workbook workbook = WorkbookFactory.create(fis)){
@@ -53,7 +54,7 @@ public class WaterService{
                 water.setTown(String.valueOf(row.getCell(0)));
                 water.setTemperature(Double.parseDouble(String.valueOf(row.getCell(1))));
                 water.setDate(String.valueOf(row.getCell(2)));
-                if(!records().contains(water)){
+                if(!database.contains(water)){
                     repository.save(water);
                     count++;
                 }
@@ -70,8 +71,8 @@ public class WaterService{
     }
 
     public boolean insertSingleRecord(Water water){
-        records();
-        if(!records().contains(water)){
+        List<Water> database = records();
+        if(!database.contains(water)){
             repository.save(water);
             return true;
         }

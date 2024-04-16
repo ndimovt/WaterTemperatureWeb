@@ -6,13 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/info")
 @CrossOrigin(origins = "http://127.0.0.1:5500")
 public class ScientistController {
     @Autowired
     private ScientistService service;
 
-    @GetMapping("/get/{username}/{password}")
+    @GetMapping("/scientist/{username}/{password}")
     public JSONObject user(@PathVariable String username, @PathVariable String password){
         return service.logIn(username, password);
     }

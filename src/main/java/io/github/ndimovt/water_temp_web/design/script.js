@@ -29,7 +29,7 @@ function scientistEntry(){
 
     let username = document.getElementById("username").value;
     let password = document.getElementById("pass").value;
-    fetch(`http://localhost:8081/info/get/${encodeURIComponent(username)}/${encodeURIComponent(password)}`,{
+    fetch(`http://localhost:8081/scientist/${encodeURIComponent(username)}/${encodeURIComponent(password)}`,{
         method: 'GET',
         mode: 'cors',
                 headers: {
