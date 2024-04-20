@@ -22,13 +22,13 @@ function byDateTown(){
 }
 
 function scientistEntry(){
+    let username, password, obj;
 
     document.getElementById('scientistLog').addEventListener('submit', function(e) {
         e.preventDefault();
 
-
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("pass").value;
+    username = document.getElementById("username").value;
+    password = document.getElementById("pass").value;
     fetch(`http://localhost:8081/scientist/${encodeURIComponent(username)}/${encodeURIComponent(password)}`,{
         method: 'GET',
         mode: 'cors',
@@ -38,7 +38,7 @@ function scientistEntry(){
             })
             .then(response => response.json())
             .then(data => {
-                let obj = {
+                    obj = {
                     username: data.username,
                     password: data.password,
                     name: data.name,
@@ -55,23 +55,15 @@ function scientistEntry(){
 }
 
 function checkTodayTemp(){
+    let town, today;
+
     document.getElementById('form').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        let selectedTown;
-        const townRadios = document.getElementsByName('town');
-        townRadios.forEach(radio => {
-            if (radio.checked) {
-                selectedTown = radio.value;
-            }
-        });
-        const currentDate = new Date();
-        let year = currentDate.getFullYear();
-        let month = currentDate.getMonth() + 1;
-        let day = currentDate.getDate();
-        let today = `${year}-${month < 10? '0' + month : month}-${day < 10? '0' + day : day}`;
+        town = selectedTown();
+        today = getCurrentDate();
 
-        fetch(`http://localhost:8081/year/${encodeURIComponent(selectedTown)}/${encodeURIComponent(today)}`,{
+        fetch(`http://localhost:8081/water/findByYear/${encodeURIComponent(town)}/${encodeURIComponent(today)}`,{
             method: 'GET',
             mode: 'cors',
             headers: {
@@ -89,29 +81,45 @@ function checkTodayTemp(){
             if(data == 0.0){
                 alert('Information is not available yet! Please try again later!');
             }else{
-                alert(`Temperature in ${selectedTown} is ${data} degrees`);
+                alert(`Temperature in ${town} is ${data} degrees`);
             }
         });
     });
+}
+
+function getCurrentDate(){
+    let currentDate, year, month, day, today;
+    currentDate = new Date();
+        year = currentDate.getFullYear();
+        month = currentDate.getMonth() + 1;
+        day = currentDate.getDate();
+        today = `${year}-${month < 10? '0' + month : month}-${day < 10? '0' + day : day}`;
+}
+
+function selectedTown(){
+    let choice, town;
+    choice = document.getElementsByName('town');
+        choice.forEach(radio => {
+            if(radio.checked){
+                town = radio.value;
+            }
+    });
+    return town;
 }
 
 const xDates = [];
 const yTemp = [];
 
 function getGraphData(){
+    let town, date;
+
     document.getElementById('form').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        let town;
-        const radioTown = document.getElementsByName('towns');
-        radioTown.forEach(radio => {
-            if(radio.checked){
-                town = radio.value;
-            }
-        });
-        let date = document.getElementById('date').value;
+        town = selectedTown();
+        date = document.getElementById('date').value;
 
-        fetch(`http://localhost:8081/byTownDate/${town}/${date}`, {
+        fetch(`http://localhost:8081/water/find/${town}/${date}`, {
             method: 'GET',
             mode: 'cors',
             headers:{
@@ -137,6 +145,8 @@ function getGraphData(){
 }
 
 function createGraph(town){
+    let layout, data;
+
     getGraphData();
     console.log(xDates);
     console.log(yTemp);
@@ -152,14 +162,15 @@ function createGraph(town){
         }
       };
 
-      var layout = {
+      layout = {
         title: `${town}`,
-        width: 500,
-        height: 500,
+        yaxis: {title: 'Temperature'},
+        xaxis: {title: 'Date'},
+        width: 600,
+        height: 600,
     };
 
-      var data = [trace1];
-
+      data = [trace1];
       Plotly.newPlot('myDiv', data, layout);
 }
 
@@ -172,12 +183,13 @@ function insertSingleRecord(){
 }
 
 function readFile(){
-    const userFile = document.getElementById('file').files[0];
+    let userFile, formData;
+    userFile = document.getElementById('file').files[0];
 
-    const formData = new FormData();
+    formData = new FormData();
     formData.append('file', userFile);
 
-    fetch('http://localhost:8081/table', {
+    fetch(`http://localhost:8081/water/file/`, {
         method: 'POST',
         body: formData,
     })
@@ -192,27 +204,21 @@ function readFile(){
 }
 
 function insertSingle(){
+    let town, information, temperature, date;
     document.getElementById('insertForm').addEventListener('submit', function(e){
         e.preventDefault();
 
-        let town;
-        const choice = document.getElementsByName('town');
-        choice.forEach(radio => {
-            if(radio.checked){
-                town = radio.value;
-            }
-        });
+        town = selectedTown();
+        temperature = document.getElementById('temperature').value;
+        date = document.getElementById('date').value;
 
-        let temperature = document.getElementById('temperature').value;
-        let date = document.getElementById('date').value;
-
-        const information = {
+        information = {
             town: town,
             temperature: temperature,
             date: date
         };
 
-        fetch('http://localhost:8081/insert', {
+        fetch('http://localhost:8081/water', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
